@@ -1,0 +1,75 @@
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+local Window = OrionLib:MakeWindow({Name = "🌱 Cheem Hub - Grow A Garden", HidePremium = false, IntroEnabled = true, IntroText = "Cheem Hub Loading...", SaveConfig = false})
+
+OrionLib:MakeNotification({
+	Name = "Cheem Hub Loaded!",
+	Content = "Script đã hoạt động thành công!",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
+local Auto = Window:MakeTab({
+	Name = "Auto Farm",
+	Icon = "rbxassetid://4370345144",
+	PremiumOnly = false
+})
+
+local Misc = Window:MakeTab({
+	Name = "Khác",
+	Icon = "rbxassetid://4370345144",
+	PremiumOnly = false
+})
+
+Auto:AddToggle({
+	Name = "Auto Tưới Cây",
+	Default = false,
+	Callback = function(Value)
+		_G.autoWater = Value
+		while _G.autoWater do
+			task.wait(1)
+			for _,v in pairs(game:GetService("Workspace").Plants:GetDescendants()) do
+				if v:IsA("ProximityPrompt") and v.Name == "Water" then
+					fireproximityprompt(v)
+				end
+			end
+		end
+	end
+})
+
+Auto:AddToggle({
+	Name = "Auto Thu Hoạch",
+	Default = false,
+	Callback = function(Value)
+		_G.autoHarvest = Value
+		while _G.autoHarvest do
+			task.wait(1)
+			for _,v in pairs(game:GetService("Workspace").Plants:GetDescendants()) do
+				if v:IsA("ProximityPrompt") and v.Name == "Harvest" then
+					fireproximityprompt(v)
+				end
+			end
+		end
+	end
+})
+
+Auto:AddToggle({
+	Name = "Auto Bán Trái Cây",
+	Default = false,
+	Callback = function(Value)
+		_G.autoSell = Value
+		while _G.autoSell do
+			task.wait(1)
+			local char = game.Players.LocalPlayer.Character
+			if char and char:FindFirstChild("HumanoidRootPart") then
+				char:MoveTo(Vector3.new(45, 5, -38)) -- Vị trí chỗ bán
+			end
+		end
+	end
+})
+
+Misc:AddButton({
+	Name = "Thoát UI",
+	Callback = function()
+		OrionLib:Destroy()
+	end
+})
